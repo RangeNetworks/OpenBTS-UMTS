@@ -1,0 +1,25 @@
+Welcome to the OpenBTS-UMTS source code
+========================================
+
+See INSTALL file for build and install instructions
+
+
+By default, OpenBTS assumes the following UDP port assignments:
+
+* 5060 -- Asterisk SIP interface
+* 5061 -- local SIP softphone
+* 5062 -- OpenBTS-UMTS SIP interface
+* 5063 -- smqueue SIP interface
+
+These can be controlled in the CONFIG table of the configuration DB.
+
+Standard paths:
+--------------
+Configuration		/etc/OpenBTS/OpenBTS-UMTS.db
+
+Release history:
+---------------
+Release	Name		Repository	Rev	Comments
+
+1.0	(none)			GitHub		??
+

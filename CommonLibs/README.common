@@ -1,0 +1,15 @@
+This directory contains common-use classes, most of which are not specific to GSM.
+
+Vector		A vector class (NOT std::vector<>) that supports
+		aliased subvectors.  Not resizable.
+BitVector	Bit-indexable vectors based on Vector.
+Interthread	A set of C++ wrappers for pthread facilities.
+Sockets		A set of C++ wrappers for Unix sockets.
+Timeval		A C++ wraper for struct timeval.
+LinkLists	Classes for simple linked lists of pointers.
+Logger		A logging interface based on syslogd.
+Configuration	A key-value configuration table.
+Regexp		A C++ wrapper on stdlib regular expressions.
+
+Do "make tests" to build a series of unit tests for these classes.
+

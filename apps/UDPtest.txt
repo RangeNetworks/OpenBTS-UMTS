@@ -1,0 +1,5 @@
+#destination @ 192.168.99.1
+nc -u -l 7777 | pv -rb > outfile
+ 
+#source transfer at 30kBytes/s
+pv -rb -L 30k infile | nc -u 192.168.99.1 7777

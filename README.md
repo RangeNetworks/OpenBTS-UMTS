@@ -1,2 +1,2 @@
-OpenNodeB
-=========
+OpenBTS-UMTS
+============

@@ -1,0 +1,116 @@
+#!/bin/sh
+#
+# This script attempts to compile the given ASN.1 specification and then
+# transforms the resulting Makefile.am.sample tailored to that specification
+# into a customized Makefile.
+#
+# The information which is necessary for this script is passed from the
+# Makefile which is going to be replaced with an updated Makefile.
+# This is called "boot-strapping" and is frequently the source of inside jokes.
+#
+# $Id: sample.makefile.regen,v 1.15 2006/09/18 21:30:03 vlm Exp $
+#
+
+if test -z "$ASN1PDU"	\
+ -o  -z "$ASN1MODULES"	\
+ -o  -z "$PROGNAME"	\
+; then
+	echo "ASN1CMDOPTS=\"$ASN1CMDOPTS\""
+	echo "ASN1MODULES=\"$ASN1MODULES\""
+	echo "ASN1PDU=\"$ASN1PDU\""
+	echo "PROGNAME=\"$PROGNAME\""
+	echo "ASN1PDU, ASN1MODULES, and PROGNAME are mandatory"
+	exit
+fi
+
+asn1c ${ASN1CMDOPTS} ${ASN1MODULES} || exit $?
+
+if test ! -f Makefile.am.sample ; then
+	echo "Makefile.am.sample is missing"
+	exit 1
+fi
+
+ASN1DEFPDU=`echo "$ASN1PDU" | tr - _`
+CFLAGS="-DPDU=${ASN1DEFPDU}"
+if test -f config.h ; then
+	CFLAGS="-DHAVE_CONFIG_H $CFLAGS"
+fi
+
+set -x
+cat Makefile.am.sample						\
+	| sed -e "s/^CFLAGS += /CFLAGS += ${CFLAGS} /"		\
+	| sed -e "s/^all: /all: ${ASN1PDU}.c /"			\
+	| sed -e "s/progname/${PROGNAME}/"			\
+	> Makefile.$$
+
+(	echo
+	echo "${ASN1PDU}.c: $0 ${ASN1MODULES}"
+	echo "	make regen-makefile"
+	echo "	@touch ${ASN1PDU}.c"
+	echo "	make"
+	echo
+	echo "regen-makefile:"
+	echo "	ASN1CMDOPTS=\"${ASN1CMDOPTS}\" \\"
+	echo "	ASN1MODULES=\"${ASN1MODULES}\" \\"
+	echo "	ASN1PDU=${ASN1PDU} \\"
+	echo "	PROGNAME=${PROGNAME} \\"
+	echo "	$0"
+	echo
+	echo 'check: ${TARGET}'
+	echo "	@if test -f sample-${ASN1PDU}-1.[db]er ; then \\"
+	echo "	for f in sample-${ASN1PDU}-*.[db]er; do \\"
+	echo '	for b in 1 17 33 980 8192; do \'
+	echo '	echo "Recoding $$f into XER and back ($$b)..."; \'
+	echo '	./${TARGET} -b $$b -iber -oxer $$f > ./.tmp.1.$$$$ || exit 2; \'
+	echo '	./${TARGET} -b $$b -ixer -oxer ./.tmp.1.$$$$ > ./.tmp.2.$$$$ || exit 2; \'
+	echo '	diff ./.tmp.1.$$$$ ./.tmp.2.$$$$ || exit 2; \'
+	echo '	rm -f ./.tmp.[12].$$$$; \'
+	echo '	done; done; fi'
+	echo "	@if test -f sample-${ASN1PDU}-1.xer ; then \\"
+	echo "	for f in sample-${ASN1PDU}-*.xer; do \\"
+	echo '	for b in 1 17 33 980 8192; do \'
+	echo '	echo "Recoding $$f into DER and back ($$b)..."; \'
+	echo '	./${TARGET} -b $$b -ixer -oder $$f > ./.tmp.1.$$$$ || exit 2; \'
+	echo '	./${TARGET} -b $$b -iber -oxer ./.tmp.1.$$$$ > ./.tmp.2.$$$$ || exit 2; \'
+	echo '	diff $$f ./.tmp.2.$$$$ || exit 2; \'
+	echo '	rm -f ./.tmp.[12].$$$$; \'
+	echo '	done; done; fi'
+	echo "	@if test -f sample-${ASN1PDU}-1.per ; then \\"
+	echo "	for f in sample-${ASN1PDU}-[1-9].per; do \\"
+	echo '	for b in 1 17 33 980 8192; do \'
+	echo '	echo "Recoding $$f into DER into XER and back ($$b)..."; \'
+	echo '	./${TARGET} -b $$b -iper -oder $$f > ./.tmp.1.$$$$ || exit 2; \'
+	echo '	./${TARGET} -b $$b -iber -oxer ./.tmp.1.$$$$ > ./.tmp.2.$$$$ || exit 2; \'
+	echo '	./${TARGET} -b $$b -ixer -oder ./.tmp.2.$$$$ > ./.tmp.3.$$$$ || exit 2; \'
+	echo '	diff ./.tmp.1.$$$$ ./.tmp.3.$$$$ || exit 2; \'
+	echo '	rm -f ./.tmp.[123].$$$$; \'
+	echo '	done; done; fi'
+	echo "	@if test -f sample-${ASN1PDU}-1-padded.per ; then \\"
+	echo "	for f in sample-*-[1-9]-padded.per; do \\"
+	echo '	pdu=`echo $$f | sed -E -e "s/sample-([A-Za-z-]+)-[0-9].*/\1/"`; \'
+	echo '	for b in 1 17 33 980 8192; do \'
+	echo '	echo "Recoding byte-padded $$f into DER into XER and back ($$b)..."; \'
+	echo '	./${TARGET} -b $$b -per-padded -p $$pdu -iper -oder $$f > ./.tmp.1.$$$$ || exit 2; \'
+	echo '	./${TARGET} -b $$b -p $$pdu -iber -oxer ./.tmp.1.$$$$ > ./.tmp.2.$$$$ || exit 2; \'
+	echo '	./${TARGET} -b $$b -p $$pdu -ixer -oper ./.tmp.2.$$$$ > ./.tmp.1.$$$$ || exit 2; \'
+	echo '	diff $$f ./.tmp.1.$$$$ || exit 2; \'
+	echo '	rm -f ./.tmp.[12].$$$$; \'
+	echo '	done; done; fi'
+	echo '	@echo ================'
+	echo '	@echo All tests passed'
+	echo '	@echo ================'
+	echo
+	echo "distclean: clean"
+	echo '	rm -f $(ASN_MODULE_SOURCES)'
+	echo '	rm -f $(ASN_MODULE_HEADERS)'
+	echo '	rm -f $(ASN_CONVERTER_SOURCES) $(ASN_CONVERTER_HEADERS)'
+	echo "	rm -f Makefile.am.sample"
+) >> Makefile.$$
+
+rm Makefile.am.sample || exit $?
+
+mv Makefile.$$ Makefile
+
+set +x
+echo
+echo "Makefile generation finished"

@@ -1,0 +1,16 @@
+OpenBTS-UMTS requires a configuration database, OpenBTS-UMTS.db.
+
+In an initial installation, OpenBTS-UMTS.db is created from OpenBTS-UMTS.example.sql.
+
+To do that:
+
+sh> sqlite3 OpenBTS-UMTS.db
+sqlite3> .read OpenBTS-UMTS.example.sql
+sqlite3> .quit
+
+
+Done!
+
+The installation location of this file will be /etc/OpenBTS/OpenBTS-UMTS.db
+BTW: If OpenBTS-UMTS.db already exists, you will need to delete that file before doing this procedure.
+

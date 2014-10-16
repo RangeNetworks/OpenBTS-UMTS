@@ -1,0 +1,73 @@
+OpenBTS provides an open source alternative to legacy telco protocols and 
+traditionally complex, proprietary hardware systems.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You can contact the copyright owner at <harvind@rangenetworks.com>.
+ 
+========================================================================== 
+
+ADDITIONAL TERMS TO THE AGPLv3 LICENSE FOR OPENBTS
+
+Permissive Terms Supplementing the License
+               
+1. Remote Interaction Through IP Networks.      
+ 
+Remote interactions through interfaces is generally a "remote network 
+interaction" and requires compliance with Section 13 of the AGPLv3. 
+However, remote interactions other than the GSM air interface are permitted
+without requiring compliance with Section 13 of the AGPLv3.  This exemption 
+of interactions with interfaces other than the GSM air interface from the 
+requirements of Section 13 is an additional permission granted to you. 
+ 
+2.  GSM "A5" cipher stream generation libraries
+ 
+Notwithstanding any other provision of this License, you have permission to 
+link the Program with GSM "A5" cipher-stream generation libraries provided 
+under any license that allows redistribution of those libraries in binary 
+form, provided that the function of any such library is limited to the 
+generation of cipher-stream bits. This permission to link to certain 
+libraries is an additional permission granted to you. 
+
+Other Terms Supplementing The License under Section 7 of the APLv3
+ 
+"OpenBTS" is a trademark of Range Networks, Inc., registered with the US 
+Patent and Trademark Office.  Your use of OpenBTS software does not include 
+the right to use the OpenBTS trademark.
+
+END OF ADDITIONAL TERMS
+ 
+========================================================================== 
+
+RECOMMENDATIONS
+
+How to comply with Section 13 of the AGPLv3 license.
+
+OpenBTS includes an implementation of the GSM network cellular air interface, 
+as well as other interfaces to IP networks.  Range Networks believes that 
+interaction of cellular handsets with the OpenBTS software is considered 
+"remote network interaction" for the purposes of the AGPLv3 and cellular 
+users have the right to obtain source code as provided in Section 13 of 
+AGPLv3 except for the additional permissions granted above.
+ 
+The recommended method for compliance with Section 13 of the AGPLv3 license 
+for OpenBTS is to deliver a text message to each handset that attaches to the 
+OpenBTS cellular network.  At a minimum, that text message should include the 
+string "OpenBTS AGPLv3" and a URL that can be used to access the OpenBTS 
+source code.  This message need not be delivered to handsets that are denied 
+registration with the network, since those handsets have been denied service.
+ 
+In OpenBTS 2.6 and above, such text messages can be delivered with the 
+"Welcome Message" feature. See OpenBTS documentation for more information 
+on the use of this feature for AGPLv3 compliance.
+
+========================================================================== 
