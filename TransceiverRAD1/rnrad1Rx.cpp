@@ -12,6 +12,7 @@
  * See the LEGAL file in the main directory for details.
  */
 
+#include <unistd.h>
 #include "rnrad1.h"
 
 using namespace ad9862;

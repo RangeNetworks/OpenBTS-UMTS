@@ -17,6 +17,7 @@
 #ifndef TIMEVAL_H
 #define TIMEVAL_H
 
+#include <unistd.h>
 #include <stdint.h>
 #include "sys/time.h"
 #include <iostream>

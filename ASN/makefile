@@ -4843,7 +4843,7 @@ CFLAGS = -O3 -g -w
 #	cd $O && libtool --mode=compile $(CC) $(CFLAGS) -D'$(ASNDEBUG)' -I. -o $(@:$O/%=%) -c $(<:$O/%=%)
 
 $O/%.o: $O/%.c
-	cd $O && libtool --mode=compile $(CC) $(CFLAGS) -I. -o $(@:$O/%=%) -c $(<:$O/%=%)
+	cd $O && libtool --mode=compile --tag=CC $(CC) $(CFLAGS) -I. -o $(@:$O/%=%) -c $(<:$O/%=%)
 
 clean:
 	rm -rf $(O)

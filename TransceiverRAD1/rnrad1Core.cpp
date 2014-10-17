@@ -19,6 +19,7 @@
 #endif
 
 #include "fpga_regs.h"
+#include <unistd.h>
 #include <stdexcept>
 #include <assert.h>
 #include <math.h>
