@@ -751,7 +751,11 @@ void SIPEngine::InitRTP(const osip_message_t * msg )
 	get_rtp_params(msg, d_port, d_ip_addr);
 	LOG(DEBUG) << "IP="<<d_ip_addr<<" "<<d_port<<" "<<mRTPPort;
 
-	rtp_session_set_local_addr(mSession, "0.0.0.0", mRTPPort );
+#ifdef ORTP_NEW_API
+	rtp_session_set_local_addr(mSession, "0.0.0.0", mRTPPort, -1);
+#else
+	rtp_session_set_local_addr(mSession, "0.0.0.0", mRTPPort);
+#endif
 	rtp_session_set_remote_addr(mSession, d_ip_addr, atoi(d_port));
 
 	// Check for event support.

@@ -73,6 +73,12 @@ PKG_CHECK_MODULES(OSIP, libosip2)
 
 # Defines ORTP_CFLAGS, ORTP_INCLUDEDIR, and ORTP_LIBS
 PKG_CHECK_MODULES(ORTP, ortp)
+AC_MSG_CHECKING([ortp api version])
+AS_IF([gcc -I=/usr/local/include -o config/test_ortp_version config/test_ortp_version.cpp -lortp &> /dev/null], [
+	AC_DEFINE(ORTP_NEW_API, 1, rtp_session_set_local_addr takes four arguments)
+	AC_MSG_RESULT([>= 0.22.0])
+	],
+	[AC_MSG_RESULT([< 0.22.0])])
 
 # Defines LIBUSB_TRANSFER_CANCELLED, LIBUSB_TRANSFER_COMPLETED, LIBUSB_SUCCESS, LIBUSB_ERROR_*
 PKG_CHECK_MODULES(LIBUSB, libusb-1.0)
