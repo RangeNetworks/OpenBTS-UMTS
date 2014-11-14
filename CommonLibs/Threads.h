@@ -162,8 +162,15 @@ class Thread {
 	void start(void *(*task)(void*), void *arg);
 
 	/** Join a thread that will stop on its own. */
-	void join() { int s = pthread_join(mThread,NULL); assert(!s); }
+	void join() {
+		if (mThread) {
+			int s = pthread_join(mThread, NULL);
+			assert(!s);
+		}
+	}
 
+	/** Send cancelation to thread */
+	void cancel() { pthread_cancel(mThread); }
 };
 
 
