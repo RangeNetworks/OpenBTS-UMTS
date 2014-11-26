@@ -13,6 +13,8 @@
 
 include $(top_srcdir)/Makefile.common
 
+ACLOCAL_AMFLAGS = -I config
+
 # Order must be preserved
 SUBDIRS = \
 	config \
@@ -26,6 +28,7 @@ SUBDIRS = \
 	SGSNGGSN \
 	SMS \
 	TransceiverRAD1 \
+	TransceiverUHD \
 	TRXManager \
 	Control \
 	NodeManager \
@@ -43,5 +46,6 @@ EXTRA_DIST = \
 install: all
 	$(MAKE) -C ./apps install
 	$(MAKE) -C ./TransceiverRAD1 install
+	$(MAKE) -C ./TransceiverUHD install
 
 FORCE:

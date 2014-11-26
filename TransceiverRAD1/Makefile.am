@@ -11,6 +11,7 @@
 # This use of this software may be subject to additional restrictions.
 # See the LEGAL file in the main directory for details.
 
+if !HAVE_UHD
 include $(top_srcdir)/Makefile.common
 
 DESTDIR = 
@@ -112,4 +113,4 @@ install: transceiver
 	install transceiver "$(DESTDIR)/OpenBTS/"
 	install ezusb.ihx "$(DESTDIR)/OpenBTS/"
 	install fpga.rbf "$(DESTDIR)/OpenBTS/"
-
+endif
