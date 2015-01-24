@@ -61,6 +61,9 @@ extern "C" {
 /* Receive scaling factor for 16 to 8 bits */
 #define CONVERT_RX_SCALE           (128.0 / 32768.0)
 
+/* Clipping detection threshold */
+#define CLIP_THRESH                120.0f
+
 UMTS::Time VectorQueue::nextTime() const
 {
   UMTS::Time retVal;
@@ -302,6 +305,16 @@ bool RadioInterface::pushBuffer(void)
   return true;
 }
 
+static int detectClipping(float *buf, int len, float thresh)
+{
+	for (int i = 0; i < len; i++) {
+		if (fabsf(buf[i]) > thresh)
+			return 1;
+	}
+
+	return 0;
+}
+
 bool RadioInterface::pullBuffer(void)
 {
   bool localUnderrun;
@@ -324,6 +337,9 @@ bool RadioInterface::pullBuffer(void)
   float *convert_out = (float *) (outerRecvBuffer->begin() + dnsampler->len());
 
   convert_short_float(convert_out, convert_in, CONVERT_RX_SCALE, outchunk * 2);
+  if (detectClipping(convert_out, outchunk * 2, CLIP_THRESH)) {
+    LOG(ALERT) << "Overpower detected on receive input";
+  }
 
   underrun |= localUnderrun;
   readTimestamp += outchunk;
