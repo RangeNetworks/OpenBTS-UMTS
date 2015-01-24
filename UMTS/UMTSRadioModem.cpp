@@ -366,7 +366,7 @@ signalVector*  RadioModem::UplinkPilotWaveforms(int scramblingCode, int codeInde
 	radioData_t *Qside = NULL;
 	scramble((radioData_t *) zeroIBurst,(radioData_t *) pilotSeq, numPilots*256,
 		scramI+gSlotLen*slot, scramQ+gSlotLen*slot, 
-		gSlotLen,&Iside,&Qside);
+		numPilots*256, &Iside,&Qside);
 	signalVector pilotChips(seqSz);
 	signalVector::iterator itr = pilotChips.begin();
 	// FIXME: need to specify correlation size here
