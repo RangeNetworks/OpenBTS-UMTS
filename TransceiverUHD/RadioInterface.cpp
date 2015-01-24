@@ -139,7 +139,8 @@ RadioInterface::~RadioInterface(void)
 bool RadioInterface::init()
 {
   dnsampler = new Resampler(RESAMP_INRATE, RESAMP_OUTRATE, RESAMP_TAP_LEN);
-  if (!dnsampler->init(Resampler::FILTER_TYPE_RRC)) {
+  if (!dnsampler->init(Resampler::FILTER_TYPE_RRC,
+                       (float) RESAMP_INRATE / (float) RESAMP_OUTRATE)) {
     LOG(ALERT) << "Rx resampler failed to initialize";
     return false;
   }
