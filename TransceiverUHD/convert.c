@@ -34,10 +34,12 @@
 /* 16*N 16-bit signed integer converted to single precision floats */
 static void _sse_convert_si16_ps_16n(float *restrict out,
 				     short *restrict in,
-				     int len)
+				     float scale, int len)
 {
 	__m128i m0, m1, m2, m3, m4, m5;
-	__m128 m6, m7, m8, m9;
+	__m128 m6, m7, m8, m9, m10;
+
+	m10 = _mm_load1_ps(&scale);
 
 	for (int i = 0; i < len / 16; i++) {
 		/* Load (unaligned) packed floats */
@@ -58,6 +60,12 @@ static void _sse_convert_si16_ps_16n(float *restrict out,
 		m8 = _mm_cvtepi32_ps(m4);
 		m9 = _mm_cvtepi32_ps(m5);
 
+		/* Scale */
+		m6 = _mm_mul_ps(m6, m10);
+		m7 = _mm_mul_ps(m7, m10);
+		m8 = _mm_mul_ps(m8, m10);
+		m9 = _mm_mul_ps(m9, m10);
+
 		/* Store */
 		_mm_storeu_ps(&out[16 * i + 0], m6);
 		_mm_storeu_ps(&out[16 * i + 4], m7);
@@ -69,30 +77,31 @@ static void _sse_convert_si16_ps_16n(float *restrict out,
 /* 16*N 16-bit signed integer conversion with remainder */
 static void _sse_convert_si16_ps(float *restrict out,
 				 short *restrict in,
-				 int len)
+				 float scale, int len)
 {
 	int start = len / 16 * 16;
 
-	_sse_convert_si16_ps_16n(out, in, len);
+	_sse_convert_si16_ps_16n(out, in, scale, len);
 
 	for (int i = 0; i < len % 16; i++)
-		out[start + i] = in[start + i];
+		out[start + i] = in[start + i] * scale;
 }
 #endif /* HAVE_SSE4_1 */
 
 /* 8*N single precision floats scaled and converted to 16-bit signed integer */
-static void _sse_convert_scale_ps_si16_8n(short *restrict out,
-					  float *restrict in,
-					  float scale, int len)
+static void _sse_convert_ps_si16_8n(short *restrict out,
+				    float *restrict in,
+				    float scale, int len)
 {
 	__m128 m0, m1, m2;
 	__m128i m4, m5;
+
+	m2 = _mm_load1_ps(&scale);
 
 	for (int i = 0; i < len / 8; i++) {
 		/* Load (unaligned) packed floats */
 		m0 = _mm_loadu_ps(&in[8 * i + 0]);
 		m1 = _mm_loadu_ps(&in[8 * i + 4]);
-		m2 = _mm_load1_ps(&scale);
 
 		/* Scale */
 		m0 = _mm_mul_ps(m0, m2);
@@ -109,25 +118,27 @@ static void _sse_convert_scale_ps_si16_8n(short *restrict out,
 }
 
 /* 8*N single precision floats scaled and converted with remainder */
-static void _sse_convert_scale_ps_si16(short *restrict out,
-				       float *restrict in,
-				       float scale, int len)
+static void _sse_convert_ps_si16(short *restrict out,
+				 float *restrict in,
+				 float scale, int len)
 {
 	int start = len / 8 * 8;
 
-	_sse_convert_scale_ps_si16_8n(out, in, scale, len);
+	_sse_convert_ps_si16_8n(out, in, scale, len);
 
 	for (int i = 0; i < len % 8; i++)
 		out[start + i] = in[start + i] * scale;
 }
 
 /* 16*N single precision floats scaled and converted to 16-bit signed integer */
-static void _sse_convert_scale_ps_si16_16n(short *restrict out,
-					   float *restrict in,
-					   float scale, int len)
+static void _sse_convert_ps_si16_16n(short *restrict out,
+				     float *restrict in,
+				     float scale, int len)
 {
 	__m128 m0, m1, m2, m3, m4;
 	__m128i m5, m6, m7, m8;
+
+	m4 = _mm_load1_ps(&scale);
 
 	for (int i = 0; i < len / 16; i++) {
 		/* Load (unaligned) packed floats */
@@ -135,7 +146,6 @@ static void _sse_convert_scale_ps_si16_16n(short *restrict out,
 		m1 = _mm_loadu_ps(&in[16 * i + 4]);
 		m2 = _mm_loadu_ps(&in[16 * i + 8]);
 		m3 = _mm_loadu_ps(&in[16 * i + 12]);
-		m4 = _mm_load1_ps(&scale);
 
 		/* Scale */
 		m0 = _mm_mul_ps(m0, m4);
@@ -157,7 +167,7 @@ static void _sse_convert_scale_ps_si16_16n(short *restrict out,
 	}
 }
 #else /* HAVE_SSE3 */
-static void convert_scale_ps_si16(short *out, float *in, float scale, int len)
+static void convert_ps_si16(short *out, float *in, float scale, int len)
 {
 	for (int i = 0; i < len; i++)
 		out[i] = in[i] * scale;
@@ -165,10 +175,10 @@ static void convert_scale_ps_si16(short *out, float *in, float scale, int len)
 #endif
 
 #ifndef HAVE_SSE4_1
-static void convert_si16_ps(float *out, short *in, int len)
+static void convert_si16_ps(float *out, short *in, float scale, int len)
 {
 	for (int i = 0; i < len; i++)
-		out[i] = in[i];
+		out[i] = in[i] * scale;
 }
 #endif
 
@@ -176,24 +186,24 @@ void convert_float_short(short *out, float *in, float scale, int len)
 {
 #ifdef HAVE_SSE3
 	if (!(len % 16))
-		_sse_convert_scale_ps_si16_16n(out, in, scale, len);
+		_sse_convert_ps_si16_16n(out, in, scale, len);
 	else if (!(len % 8))
-		_sse_convert_scale_ps_si16_8n(out, in, scale, len);
+		_sse_convert_ps_si16_8n(out, in, scale, len);
 	else
-		_sse_convert_scale_ps_si16(out, in, scale, len);
+		_sse_convert_ps_si16(out, in, scale, len);
 #else
-	convert_scale_ps_si16(out, in, scale, len);
+	convert_ps_si16(out, in, scale, len);
 #endif
 }
 
-void convert_short_float(float *out, short *in, int len)
+void convert_short_float(float *out, short *in, float scale, int len)
 {
 #ifdef HAVE_SSE4_1
 	if (!(len % 16))
-		_sse_convert_si16_ps_16n(out, in, len);
+		_sse_convert_si16_ps_16n(out, in, scale, len);
 	else
-		_sse_convert_si16_ps(out, in, len);
+		_sse_convert_si16_ps(out, in, scale, len);
 #else
-	convert_si16_ps(out, in, len);
+	convert_si16_ps(out, in, scale, len);
 #endif
 }

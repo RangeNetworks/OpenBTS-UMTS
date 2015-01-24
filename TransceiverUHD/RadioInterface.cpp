@@ -58,6 +58,9 @@ extern "C" {
 /* Universal resampling parameters */
 #define NUMCHUNKS                  32
 
+/* Receive scaling factor for 16 to 8 bits */
+#define CONVERT_RX_SCALE           (128.0 / 32768.0)
+
 UMTS::Time VectorQueue::nextTime() const
 {
   UMTS::Time retVal;
@@ -319,7 +322,7 @@ bool RadioInterface::pullBuffer(void)
   short *convert_in = convertRecvBuffer;
   float *convert_out = (float *) (outerRecvBuffer->begin() + dnsampler->len());
 
-  convert_short_float(convert_out, convert_in, outchunk * 2);
+  convert_short_float(convert_out, convert_in, CONVERT_RX_SCALE, outchunk * 2);
 
   underrun |= localUnderrun;
   readTimestamp += outchunk;
