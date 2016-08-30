@@ -1107,9 +1107,9 @@ static CLIStatus power(int argc, char **argv, ostream& os)
 {
 //	os << "current downlink power " << gNodeB.powerManager().power() << " dB wrt full scale" << endl;
 	os << "current attenuation bounds "
-		<< gConfig.getNum("GSM.Radio.PowerManager.MinAttenDB")
+		<< gConfig.getNum("UMTS.Radio.PowerManager.MinAttenDB")
 		<< " to "
-		<< gConfig.getNum("GSM.Radio.PowerManager.MaxAttenDB")
+		<< gConfig.getNum("UMTS.Radio.PowerManager.MaxAttenDB")
 		<< " dB" << endl;
 
 	if (argc==1) return SUCCESS;
@@ -1122,24 +1122,24 @@ static CLIStatus power(int argc, char **argv, ostream& os)
 		return BAD_VALUE;
 	}
 
-	if (!gConfig.isValidValue("GSM.Radio.PowerManager.MinAttenDB", argv[1])) {
+	if (!gConfig.isValidValue("UMTS.Radio.PowerManager.MinAttenDB", argv[1])) {
 		os << "Invalid new value for min.  It must be in range (";
-		os << gConfig.mSchema["GSM.Radio.PowerManager.MinAttenDB"].getValidValues() << ")" << endl;
+		os << gConfig.mSchema["UMTS.Radio.PowerManager.MinAttenDB"].getValidValues() << ")" << endl;
 		return BAD_VALUE;
 	}
-	if (!gConfig.isValidValue("GSM.Radio.PowerManager.MaxAttenDB", argv[2])) {
+	if (!gConfig.isValidValue("UMTS.Radio.PowerManager.MaxAttenDB", argv[2])) {
 		os << "Invalid new value for max.  It must be in range (";
-		os << gConfig.mSchema["GSM.Radio.PowerManager.MaxAttenDB"].getValidValues() << ")" << endl;
+		os << gConfig.mSchema["UMTS.Radio.PowerManager.MaxAttenDB"].getValidValues() << ")" << endl;
 		return BAD_VALUE;
 	}
 
-	gConfig.set("GSM.Radio.PowerManager.MinAttenDB",argv[1]);
-	gConfig.set("GSM.Radio.PowerManager.MaxAttenDB",argv[2]);
+	gConfig.set("UMTS.Radio.PowerManager.MinAttenDB",argv[1]);
+	gConfig.set("UMTS.Radio.PowerManager.MaxAttenDB",argv[2]);
 
 	os << "new attenuation bounds "
-		<< gConfig.getNum("GSM.Radio.PowerManager.MinAttenDB")
+		<< gConfig.getNum("UMTS.Radio.PowerManager.MinAttenDB")
 		<< " to "
-		<< gConfig.getNum("GSM.Radio.PowerManager.MaxAttenDB")
+		<< gConfig.getNum("UMTS.Radio.PowerManager.MaxAttenDB")
 		<< " dB" << endl;
 
 	return SUCCESS;
