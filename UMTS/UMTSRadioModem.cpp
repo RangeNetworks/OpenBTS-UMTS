@@ -1211,7 +1211,7 @@ void RadioModem::transmitSlot(UMTS::Time nowTime, bool &underrun)
 
   // write to the socket
   mDataSocket.write(buffer,bufferSize);
-  delete []buffer;
+  free(buffer);
 
   mLastTransmitTime = nowTime;
   //LOG(INFO) << LOGVAR(mLastTransmitTime) <<LOGVAR2("clock.FN",gNodeB.clock().FN());
