@@ -260,11 +260,11 @@ int main(int argc, char *argv[])
 
 	struct sockaddr_un cmdSockName;
 	cmdSockName.sun_family = AF_UNIX;
-	const char* sockpath = gConfig.getStr("CLI.SocketPath").c_str();
-	char rmcmd[strlen(sockpath)+5];
-	sprintf(rmcmd,"rm -f %s",sockpath);
+	const string sockpath = gConfig.getStr("CLI.SocketPath");
+	char rmcmd[strlen(sockpath.c_str())+5];
+	sprintf(rmcmd,"rm -f %s",sockpath.c_str());
 	if (system(rmcmd)) {}	// The 'if' shuts up gcc warnings.
-	strcpy(cmdSockName.sun_path,sockpath);
+	strcpy(cmdSockName.sun_path,sockpath.c_str());
 	LOG(INFO) "binding CLI datagram socket at " << sockpath;
 	if (bind(sock, (struct sockaddr *) &cmdSockName, sizeof(struct sockaddr_un))) {
 		perror("binding name to cmd datagram socket");
