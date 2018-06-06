@@ -1,4 +1,4 @@
-sudo apt-get install git autoconf libtool gpp g++ libzmq3-dev pkg-config libosip2-dev libortp-dev libusb-dev libusb-1.0-0-dev libuhd-dev -y
+sudo apt-get install git autoconf libtool libtool-bin gpp g++ libzmq3-dev pkg-config libosip2-dev libortp-dev libusb-dev libusb-1.0-0-dev libreadline-dev  libsqlite3-dev libuhd-dev -y
 
 git submodule init
 git submodule update
