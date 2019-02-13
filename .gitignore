@@ -1,3 +1,4 @@
+*~
 ._*
 *.a
 *.o
@@ -17,6 +18,7 @@ apps/fpga.rbf
 apps/transceiver
 build-arch-stamp
 build-indep-stamp
+compile
 config/libtool.m4
 config/ltoptions.m4
 config/ltsugar.m4
@@ -47,3 +49,4 @@ apps/OpenBTS-UMTS
 apps/OpenBTS-UMTSCLI
 apps/OpenBTS-UMTSDo
 vlm-asn1c-0959ffb/
+README
