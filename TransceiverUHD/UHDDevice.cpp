@@ -22,8 +22,7 @@
 
 #include <uhd/version.hpp>
 #include <uhd/property_tree.hpp>
-#include <uhd/utils/thread_priority.hpp>
-#include <uhd/utils/msg.hpp>
+#include <uhd/utils/thread.hpp>
 
 #include "Threads.h"
 #include "Logger.h"
@@ -107,28 +106,6 @@ static void *async_event_loop(UHDDevice *dev)
 	}
 
 	return NULL;
-}
-
-/* 
- * Catch and drop underrun 'U' and overrun 'O' messages from stdout
- * since we already report using the logging facility. Direct
- * everything else appropriately.
- */
-void uhd_msg_handler(uhd::msg::type_t type, const std::string &msg)
-{
-	switch (type) {
-	case uhd::msg::status:
-		LOG(INFO) << msg;
-		break;
-	case uhd::msg::warning:
-		LOG(WARNING) << msg;
-		break;
-	case uhd::msg::error:
-		LOG(ERR) << msg;
-		break;
-	case uhd::msg::fastpath:
-		break;
-	}
 }
 
 static void thread_enable_cancel(bool cancel)
@@ -409,9 +386,6 @@ bool UHDDevice::start()
 	}
 
 	setPriority();
-
-	/* Register msg handler */
-	uhd::msg::register_handler(&uhd_msg_handler);
 
 	/* Start receive streaming */
 	if (!restart())
