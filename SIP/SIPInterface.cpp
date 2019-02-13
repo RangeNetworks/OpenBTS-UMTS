@@ -287,7 +287,7 @@ const char* extractIMSI(const osip_message_t *msg)
 	unsigned namelen = strlen(IMSI);
 	if ((namelen>19)||(namelen<18)) {
 		LOG(WARNING) << "INVITE with malformed username \"" << IMSI << "\"";
-		return false;
+		return nullptr;
 	}
 	// Skip first 4 char "IMSI".
 	return IMSI+4;
