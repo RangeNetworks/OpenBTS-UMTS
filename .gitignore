@@ -24,6 +24,7 @@ config/ltoptions.m4
 config/ltsugar.m4
 config/ltversion.m4
 config/lt~obsolete.m4
+config/test_ortp_version
 config.guess
 config.h
 config.log
