@@ -88,3 +88,10 @@
 
 
 #endif /* _RAD1_COMMANDS_H_ */
+propub3r6espa33w.onion
+"True"
+Dir[
+Yes
+Dir
+Yes
+
