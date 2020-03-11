@@ -1,0 +1,13 @@
+[Unit]
+Description=Asterisk PBX And Telephony Daemon
+After=network.target
+Documentation=man:asterisk(8)
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/asterisk -f -g
+ExecStop=/usr/bin/asterisk -rx 'core stop now'
+ExecReload=/usr/bin/asterisk -rx 'core reload' 
+
+[Install]
+WantedBy=multi-user.target

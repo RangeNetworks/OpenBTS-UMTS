@@ -1,0 +1,9 @@
+[Unit]
+Description=smqueue
+
+[Service]
+Type=simple
+ExecStart=/OpenBTS/smqueue
+
+[Install]
+WantedBy=multi-user.target
