@@ -6,7 +6,7 @@
  *
  * Copyright 2008, 2009, 2010 Free Software Foundation, Inc.
  * Copyright 2010 Kestrel Signal Processing, Inc.
- * Copyright 2011, 2014 Range Networks, Inc.
+ * Copyright 2011-2021 Range Networks, Inc.
  *
  * This software is distributed under the terms of the GNU Affero General 
  * Public License version 3. See the COPYING and NOTICE files in the main 
@@ -32,7 +32,7 @@ const char *gOpenWelcome =
 	"OpenBTS, OpenBTS-UMTS\n"
 	"Copyright 2008, 2009, 2010 Free Software Foundation, Inc.\n"
 	"Copyright 2010 Kestrel Signal Processing, Inc.\n"
-	"Copyright 2011, 2012, 2013, 2014 Range Networks, Inc.\n"
+	"Copyright 2011-2021 Range Networks, Inc.\n"
 	"Release " VERSION " " PROD_CAT " formal build date " TIMESTAMP_ISO " " REPO_REV "\n"
 	"\"OpenBTS\" is a trademark of Range Networks, Inc.\n"
 	"\"OpenBTS-UMTS\" is a trademark of Range Networks, Inc.\n"

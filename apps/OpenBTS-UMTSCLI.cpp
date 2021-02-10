@@ -2,7 +2,7 @@
  * OpenBTS provides an open source alternative to legacy telco protocols and
  * traditionally complex, proprietary hardware systems.
  *
- * Copyright 2011, 2012, 2013, 2014 Range Networks, Inc.
+ * Copyright 2011-2021 Range Networks, Inc.
  *
  * This software is distributed under the terms of the GNU Affero General 
  * See the COPYING and NOTICE files in the current or main directory for
