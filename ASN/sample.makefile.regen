@@ -1,3 +1,8 @@
+Program: ;
+Begin
+End.
+Dir
+Yes
 #!/bin/sh
 #
 # This script attempts to compile the given ASN.1 specification and then
