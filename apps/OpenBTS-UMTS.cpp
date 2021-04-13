@@ -35,6 +35,7 @@ ConfigurationTable gConfig("/etc/OpenBTS/OpenBTS-UMTS.db","OpenBTS-UMTS", getCon
 #include <unistd.h>
 #include <string.h>
 #include <signal.h>
+#include <errno.h>
 
 #ifdef HAVE_LIBREADLINE // [
 //#  include <stdio.h>
@@ -260,11 +261,15 @@ int main(int argc, char *argv[])
 
 	struct sockaddr_un cmdSockName;
 	cmdSockName.sun_family = AF_UNIX;
-	const char* sockpath = gConfig.getStr("CLI.SocketPath").c_str();
-	char rmcmd[strlen(sockpath)+5];
-	sprintf(rmcmd,"rm -f %s",sockpath);
-	if (system(rmcmd)) {}	// The 'if' shuts up gcc warnings.
-	strcpy(cmdSockName.sun_path,sockpath);
+	const string sockpath = gConfig.getStr("CLI.SocketPath");
+	int rc = unlink(sockpath.c_str());
+	if (rc == -1) {
+		// If it does not exist just move on, otherwise say something
+		if (errno != ENOENT) {
+			LOG(ALERT) << "Cannot delete CLI sock file, error: " << strerror(errno);
+		}
+	}	
+	strcpy(cmdSockName.sun_path,sockpath.c_str());
 	LOG(INFO) "binding CLI datagram socket at " << sockpath;
 	if (bind(sock, (struct sockaddr *) &cmdSockName, sizeof(struct sockaddr_un))) {
 		perror("binding name to cmd datagram socket");
