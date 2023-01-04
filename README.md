@@ -1,6 +1,6 @@
 # OpenBTS-UMTS reloaded 2023
 
-OpenBTS-UMTS reloaded. Compatibility with latest UHD drivers, several fixes and updated install documentation for ubuntu 22.04
+OpenBTS-UMTS reloaded for 2023. This fork extends changes from @EurecatSecurity make it compatiblee with latest UHD drivers, several fixes to work on Ubuntu 22.04.
 
 ## Documentation
 
