@@ -754,7 +754,7 @@ void SIPEngine::InitRTP(const osip_message_t * msg )
 #ifdef ORTP_NEW_API
 	rtp_session_set_local_addr(mSession, "0.0.0.0", mRTPPort, -1);
 #else
-	rtp_session_set_local_addr(mSession, "0.0.0.0", mRTPPort);
+	rtp_session_set_local_addr(mSession, "0.0.0.0", mRTPPort, mRTPPort+1);
 #endif
 	rtp_session_set_remote_addr(mSession, d_ip_addr, atoi(d_port));
 

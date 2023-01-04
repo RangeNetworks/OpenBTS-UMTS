@@ -1027,7 +1027,10 @@ void BeaconConfig::regenerate()
 	uint32_t *cellID = RN_CALLOC(uint32_t);
 	// (pat) TODO: Is this right?  network order is high byte first.
 	// Luckily, hardly matters.
-	*cellID = htonl(gConfig.getNum("UMTS.Identity.CI"));
+	*cellID = gConfig.getNum("UMTS.Identity.CI");
+	// UMTS protocol specifies that the cell ID is a 28 bit number, but it is casted into a 32 bit value.  The 4 LSB bits are considered padding, so the "real" data must be shifted about this padding.
+	*cellID = *cellID << 4;
+	*cellID = htonl(*cellID);
 	// cellID is a 28-bit BIT_STRING
 	setAsnBIT_STRING(&mSIB3.cellIdentity,(uint8_t*)cellID,28);
 	// ASN CellSelectReselectInfoSIB_3_4 cellSelectReselectInfo, 10.3.2.3
