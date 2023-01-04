@@ -1,13 +1,9 @@
 #!/bin/bash
 # This script has been tested in Ubuntu 16.04 and 18.04. Please report any problem you find.
 
-# Latest UHD from Ettus PPA
-sudo add-apt-repository ppa:ettusresearch/uhd
-sudo apt-get update
-sudo apt-get install libuhd-dev libuhd003 uhd-host
+# Install all package dependencies
+sudo apt install autoconf libtool build-essential libuhd-dev uhd-host libzmq3-dev libosip2-dev libortp-dev libusb-1.0-0-dev asn1c libtool-bin libsqlite3-dev libreadline-dev
 
-# Other dependencies, mostly build-time
-sudo apt-get install git autoconf libtool libtool-bin gpp g++ libzmq3-dev pkg-config libosip2-dev libortp-dev libusb-dev libusb-1.0-0-dev libreadline-dev  libsqlite3-dev -y
 # Clone submodules from base repo
 git submodule init
 git submodule update
