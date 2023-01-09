@@ -14,6 +14,7 @@ enum uhd_dev_type {
 	B2XX,
 	X300,
 	UMTRX,
+	LimeSDRUSB, // picked from http://swigerco.com/UHDDevice.h.diff
 	NUM_USRP_TYPES,
 };
 

@@ -82,11 +82,12 @@ static struct uhd_dev_offset uhd_offsets[NUM_USRP_TYPES] = {
 	{ B2XX,  99 },
 	{ X300,  73 },
 	{ UMTRX, 0 },
+	{ LimeSDRUSB, 50 }, // picked from http://swigerco.com/UHDDevice.cpp.diff
 };
 
 static int get_dev_offset(enum uhd_dev_type type)
 {
-	if ((type != B2XX) && (type != USRP2) && (type != X300)) {
+	if ((type != B2XX) && (type != USRP2) && (type != X300) && (type != LimeSDRUSB)) {
 		LOG(ALERT) << "Unsupported device type";
 		return 0;
 	}
@@ -237,7 +238,7 @@ bool UHDDevice::parse_dev_type()
 {
         std::string mboard_str, dev_str;
         uhd::property_tree::sptr prop_tree;
-        size_t usrp2_str, b200_str, b210_str, x300_str, x310_str, b205mini_str;
+        size_t usrp2_str, b200_str, b210_str, x300_str, x310_str, b205mini_str, LimeSDRUSB_str;
 
         prop_tree = usrp_dev->get_device()->get_tree();
         dev_str = prop_tree->access<std::string>("/name").get();
@@ -249,6 +250,7 @@ bool UHDDevice::parse_dev_type()
         b210_str = mboard_str.find("B210");
         x300_str = mboard_str.find("X300");
         x310_str = mboard_str.find("X310");
+	LimeSDRUSB_str = mboard_str.find("LimeSDR-USB");
 
         if (b200_str != std::string::npos) {
                 dev_type = B2XX;
@@ -262,7 +264,9 @@ bool UHDDevice::parse_dev_type()
                 dev_type = X300;
         } else if (x310_str != std::string::npos) {
                 dev_type = X300;
-        } else {
+        } else if (LimeSDRUSB_str != std::string::npos) {
+		dev_type = LimeSDRUSB;
+ 	} else {
                 goto nosupport;
         }
 
