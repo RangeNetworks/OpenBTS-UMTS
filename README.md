@@ -9,6 +9,7 @@ OpenBTS-UMTS reloaded for 2023. This fork extends changes from @EurecatSecurity 
   * X300/X310
   * N200/N210
   * USRP2
+* LimeSDR (experimental)
 
 ## Documentation
 
