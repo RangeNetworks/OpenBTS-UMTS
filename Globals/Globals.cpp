@@ -33,6 +33,7 @@ const char *gOpenWelcome =
 	"Copyright 2008, 2009, 2010 Free Software Foundation, Inc.\n"
 	"Copyright 2010 Kestrel Signal Processing, Inc.\n"
 	"Copyright 2011, 2012, 2013, 2014 Range Networks, Inc.\n"
+	"Reloaded for 2023 by FlUxIuS @ Penthertz SAS.\n"
 	"Release " VERSION " " PROD_CAT " formal build date " TIMESTAMP_ISO " " REPO_REV "\n"
 	"\"OpenBTS\" is a trademark of Range Networks, Inc.\n"
 	"\"OpenBTS-UMTS\" is a trademark of Range Networks, Inc.\n"

@@ -15,7 +15,7 @@ dnl See the LEGAL file in the main directory for details.
 dnl FIXME -- Need to add dependency check for asn1c.
 
 AC_PREREQ(2.57)
-AC_INIT(openbts-umts,1.0-master)
+AC_INIT(openbts-umts,1.1-master)
 
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
