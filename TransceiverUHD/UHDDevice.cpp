@@ -250,7 +250,7 @@ bool UHDDevice::parse_dev_type()
         b210_str = mboard_str.find("B210");
         x300_str = mboard_str.find("X300");
         x310_str = mboard_str.find("X310");
-	LimeSDRUSB_str = mboard_str.find("LimeSDR-USB");
+	LimeSDRUSB_str = mboard_str.find("LimeSDR");
 
         if (b200_str != std::string::npos) {
                 dev_type = B2XX;
