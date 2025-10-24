@@ -1025,9 +1025,11 @@ void BeaconConfig::regenerate()
 	// UC-Id or C-Id is used to identify a cell in UTRAN Iub and Iur interfaces or Iur-g interface: UC-Id = RNC-Id + C-Id.
 	// (pat) This last does not apply to us because we dont use the Iub/Iur interfaces.
 	uint32_t *cellID = RN_CALLOC(uint32_t);
-	// (pat) TODO: Is this right?  network order is high byte first.
-	// Luckily, hardly matters.
-	*cellID = htonl(gConfig.getNum("UMTS.Identity.CI"));
+	*cellID = gConfig.getNum("UMTS.Identity.CI");
+	// UMTS protocol specifies that the cell ID is a 28 bit number, but it is represented as a 32 bit value in memory.
+	// The value that is broadcast is the first 28 bits, not the last 28, so the data must be shifted.
+	*cellID = *cellID << 4;
+	*cellID = htonl(*cellID);
 	// cellID is a 28-bit BIT_STRING
 	setAsnBIT_STRING(&mSIB3.cellIdentity,(uint8_t*)cellID,28);
 	// ASN CellSelectReselectInfoSIB_3_4 cellSelectReselectInfo, 10.3.2.3
